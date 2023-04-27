@@ -5,7 +5,11 @@
 package it.polito.tdp.meteo;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.meteo.model.Model;
+import it.polito.tdp.meteo.model.Rilevamento;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,7 +25,7 @@ public class FXMLController {
     private URL location;
 
     @FXML // fx:id="boxMese"
-    private ChoiceBox<?> boxMese; // Value injected by FXMLLoader
+    private ChoiceBox<Integer> boxMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnUmidita"
     private Button btnUmidita; // Value injected by FXMLLoader
@@ -32,13 +36,40 @@ public class FXMLController {
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
 
+	private Model model;
+
     @FXML
     void doCalcolaSequenza(ActionEvent event) {
+    	
+    	txtResult.clear();
+    	
+    	Integer mese = boxMese.getValue();
+    	
+    	if (mese == null) {
+    		txtResult.setText("Selezionare un mese dal menù a tendina");
+    		return;
+    	}
+    	
+    	
 
     }
 
     @FXML
     void doCalcolaUmidita(ActionEvent event) {
+    	
+    	txtResult.clear();
+    	
+    	Integer mese = boxMese.getValue();
+    	
+    	if (mese == null) {
+    		txtResult.setText("Selezionare un mese dal menù a tendina");
+    		return;
+    	}
+    	
+    	List<Rilevamento> lista = model.getAvgRilevamentiMese(mese);
+    	for (Rilevamento r : lista) {
+    		txtResult.appendText(r.toString1() + "\n");
+    	}
 
     }
 
@@ -48,7 +79,17 @@ public class FXMLController {
         assert btnUmidita != null : "fx:id=\"btnUmidita\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnCalcola != null : "fx:id=\"btnCalcola\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
+        
+        for (int i=1; i<13; i++) {
+        	boxMese.getItems().add(i);
+        }
 
     }
+
+	public void setModel(Model model) {
+		// TODO Auto-generated method stub
+		this.model = model;
+		
+	}
 }
 
